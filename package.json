@@ -1,0 +1,13 @@
+{
+  "name": "atlas-devops",
+  "version": "1.0.0",
+  "description": "Projeto Node simples para demonstrar CI/CD e Docker.",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
