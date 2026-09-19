@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createResponseBody, projectFacts } from '../src/app.js';
+import { createResponseBody, escapeHtml, projectFacts, renderHomePage } from '../src/app.js';
 
 test('home page returns html', () => {
   const response = createResponseBody('/');
@@ -36,4 +36,16 @@ test('unknown routes return not found', () => {
 
   assert.equal(response.statusCode, 404);
   assert.match(response.body, /nao encontrada/i);
+});
+
+test('escapeHtml converts special characters', () => {
+  const value = escapeHtml('<atlas & devops> "test"');
+
+  assert.equal(value, '&lt;atlas &amp; devops&gt; &quot;test&quot;');
+});
+
+test('renderHomePage includes one card per fact', () => {
+  const html = renderHomePage();
+
+  assert.equal((html.match(/<article class="card">/g) ?? []).length, projectFacts.length);
 });

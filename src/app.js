@@ -250,4 +250,4 @@ function createResponseBody(requestUrl) {
   };
 }
 
-export { createResponseBody, renderHomePage, projectFacts };
+export { createResponseBody, renderHomePage, projectFacts, escapeHtml };
