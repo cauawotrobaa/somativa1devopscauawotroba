@@ -1,0 +1,32 @@
+name: Alerts
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  notify-discord:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF_NAME: ${{ github.ref_name }}
+          GITHUB_SHA: ${{ github.sha }}
+        run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "DISCORD_WEBHOOK_URL secret is not configured. Skipping alert."
+            exit 0
+          fi
+
+          payload=$(cat <<EOF
+          {
+            "content": "GitHub Actions alert: $GITHUB_REPOSITORY recebeu um push em $GITHUB_REF_NAME. Commit: $GITHUB_SHA"
+          }
+EOF
+          )
+
+          curl -H "Content-Type: application/json" -d "$payload" "$DISCORD_WEBHOOK_URL"
